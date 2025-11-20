@@ -10,6 +10,7 @@ export function SearchBar({ value, onChange }: SearchBarProps) {
       placeholder="🔍 Пошук монети..."
       className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-64"
       value={value}
+      name="searchQuery"
       onChange={(e) => onChange(e.target.value)}
     />
   );

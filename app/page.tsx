@@ -9,8 +9,8 @@ export default async function Home() {
       <div className="text-center mb-10 max-w-2xl">
         <h1 className="text-4xl font-bold text-blue-400">💰 Crypto Tracker</h1>
         <p className="text-gray-400 mt-3">
-          Відстежуй ціни криптовалют у реальному часі, дивись популярні монети
-          та отримуй актуальні дані з CoinGecko API.
+          Track, explore, and stay updated — real-time cryptocurrency prices at
+          your fingertips
         </p>
       </div>
       {/* Популярні монети */}

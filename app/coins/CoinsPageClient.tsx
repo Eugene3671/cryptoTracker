@@ -2,6 +2,7 @@
 
 import { CoinList } from "@/components/CoinList/CoinList";
 import { FilterBar } from "@/components/FilterBar/FilterBar";
+import LoadMoreBtn from "@/components/LoadMoreBtn/LoadMoreBtn";
 import { SearchBar } from "@/components/SearchBar/SearchBar";
 import { SortBar } from "@/components/SortBar/SortBar";
 import { fetchPopCoins, fetchSearchCoins } from "@/lib/api";
@@ -36,7 +37,10 @@ export default function CoinsClientPage() {
     const newCoins = debounceQuery.trim()
       ? (searchCoins ?? [])
       : (popularCoins ?? []);
-    if (!newCoins.length) return;
+    if (!newCoins.length) {
+      setHasMore(false);
+      return;
+    }
 
     if (page === 1) {
       setCoins(newCoins);
@@ -49,23 +53,14 @@ export default function CoinsClientPage() {
         );
         return uniqueCoins;
       });
+      setHasMore(newCoins.length >= PAGE_SIZE);
     }
 
     if (newCoins.length < PAGE_SIZE) setHasMore(false);
   }, [popularCoins, searchCoins, page, debounceQuery]);
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!hasMore) return;
-      if (
-        window.innerHeight + window.scrollY >=
-        document.body.offsetHeight - 50
-      ) {
-        setPage((prev) => prev + 1);
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasMore]);
+  const handleLoadMore = () => {
+    setPage(page + 1);
+  };
 
   const filteredCoins = (coins ?? []).filter((coin: Coins) => {
     if (filterOption === "top100") return coin.market_cap_rank <= 100;
@@ -98,6 +93,7 @@ export default function CoinsClientPage() {
       />
       <SortBar sortOption={sortOption} setSortOption={setSortOption} />
       {sortedCoins && <CoinList coins={sortedCoins} />}
+      {hasMore && <LoadMoreBtn handleClick={handleLoadMore} />}
     </div>
   );
 }
